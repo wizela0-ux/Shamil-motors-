@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="am" dir="ltr" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ሻሚል ሞተር እና ባጃጅ መሸጫ | Shamil Motor & Bajaj Sales</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root.dark {
+            --bg-color: #07090e;
+            --card-bg: #111827;
+            --card-border: #1f2937;
+            --primary-blue: #0ea5e9;
+            --primary-hover: #0284c7;
+            --text-main: #f9fafb;
+            --text-muted: #9ca3af;
+            --accent-glow: rgba(14, 165, 233, 0.5);
+            --header-bg: #0b0f19;
+            --input-bg: #1f2937;
+        }
+
+        :root.light {
+            --bg-color: #f3f4f6;
+            --card-bg: #ffffff;
+            --card-border: #e5e7eb;
+            --primary-blue: #0284c7;
+            --primary-hover: #0369a1;
+            --text-main: #111827;
+            --text-muted: #4b5563;
+            --accent-glow: rgba(2, 132, 199, 0.3);
+            --header-bg: #ffffff;
+            --input-bg: #f9fafb;
+        }
+
+        * {
+            margin: 0; padding: 0; box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex; flex-direction: column;
+            padding-bottom: 75px;
+        }
+
+        /* Glowing Centered Header */
+        header {
+            background-color: var(--header-bg);
+            border-bottom: 1px solid var(--card-border);
+            padding: 25px 20px;
+            display: flex; justify-content: center; align-items: center;
+            position: sticky; top: 0; z-index: 1000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .menu-toggle-btn {
+            position: absolute; left: 20px;
+            background: none; border: none; color: var(--primary-blue); font-size: 24px; cursor: pointer;
+        }
+
+        .brand-container {
+            display: flex; flex-direction: column; align-items: center; text-align: center;
+        }
+
+        .brand-title h1 {
+            font-size: 28px; font-weight: 800; color: var(--primary-blue);
+            text-shadow: 0 0 10px var(--primary-blue), 0 0 20px var(--primary-blue), 0 0 30px var(--accent-glow);
+            letter-spacing: 1px;
+        }
+
+        .brand-title p {
+            font-size: 13px; color: var(--text-muted); font-weight: 600; margin-top: 4px;
+        }
+
+        /* Welcome Section */
+        .welcome-section {
+            background: linear-gradient(135deg, var(--card-bg), var(--header-bg));
+            border-bottom: 1px solid var(--card-border);
+            padding: 40px 20px; text-align: center; margin-bottom: 30px;
+        }
+        .welcome-section h2 { font-size: 26px; font-weight: 800; color: var(--text-main); margin-bottom: 10px; }
+        .welcome-section p { font-size: 14px; color: var(--text-muted); max-width: 650px; margin: 0 auto; line-height: 1.6; }
+
+        /* Container & Grid */
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; width: 100%; flex: 1; }
+        .search-filter-section { margin-bottom: 30px; display: flex; flex-direction: column; gap: 18px; }
+        .search-bar { position: relative; width: 100%; }
+        .search-bar input {
+            width: 100%; padding: 14px 18px 14px 48px;
+            background-color: var(--card-bg); border: 1px solid var(--card-border);
+            border-radius: 14px; color: var(--text-main); font-size: 15px; outline: none;
+        }
+        .search-bar i { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 16px; }
+
+        .category-tabs { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 5px; }
+        .tab-btn {
+            background-color: var(--card-bg); border: 1px solid var(--card-border);
+            color: var(--text-muted); padding: 10px 22px; border-radius: 24px;
+            cursor: pointer; font-size: 14px; font-weight: 600; white-space: nowrap;
+        }
+        .tab-btn.active, .tab-btn:hover {
+            background-color: var(--primary-blue); border-color: var(--primary-blue);
+            color: white; box-shadow: 0 0 15px var(--accent-glow);
+        }
+
+        .vehicles-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 24px; }
+        .vehicle-card {
+            background-color: var(--card-bg); border: 1px solid var(--card-border);
+            border-radius: 18px; overflow: hidden; display: flex; flex-direction: column;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+        
+        /* Touch Swipeable Slider Area */
+        .card-slider {
+            position: relative; width: 100%; height: 210px; background-color: #000;
+            overflow: hidden; touch-action: pan-y;
+        }
+        .card-slider img { width: 100%; height: 100%; object-fit: cover; cursor: pointer; }
+        .slide-indicators { position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); display: flex; gap: 5px; z-index: 10; }
+        .indicator { width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,0.4); }
+        .indicator.active { background: var(--primary-blue); width: 18px; border-radius: 4px; }
+
+        .card-body { padding: 18px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
+        .vehicle-title { font-size: 17px; font-weight: 700; color: var(--text-main); }
+        .vehicle-price { font-size: 19px; font-weight: 800; color: var(--primary-blue); }
+        .vehicle-desc { font-size: 13px; color: var(--text-muted); line-height: 1.5; flex: 1; }
+        .card-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+        .btn-call, .btn-telegram {
+            padding: 10px 12px; border-radius: 10px; font-size: 13px; font-weight: 700;
+            text-align: center; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 8px;
+        }
+        .btn-call { background-color: #10b981; color: white; }
+        .btn-telegram { background-color: var(--primary-blue); color: white; }
+
+        /* Sticky Footer */
+        .sticky-footer {
+            position: fixed; bottom: 0; left: 0; width: 100%;
+            background-color: var(--header-bg); border-top: 1px solid var(--card-border);
+            padding: 12px 25px; display: flex; justify-content: space-between; align-items: center;
+            z-index: 999; font-size: 13px; box-shadow: 0 -5px 20px rgba(0,0,0,0.25);
+        }
+        .footer-info span { color: var(--text-muted); }
+        .footer-info strong { color: var(--text-main); }
+        .footer-call-btn {
+            background-color: var(--primary-blue); color: white; padding: 8px 16px;
+            border-radius: 20px; text-decoration: none; font-weight: 700;
+            display: flex; align-items: center; gap: 6px;
+        }
+
+        /* Sidebar */
+        .sidebar-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.65); z-index: 2000;
+        }
+        .sidebar {
+            position: fixed; top: 0; left: -320px; width: 300px; height: 100%;
+            background-color: var(--card-bg); border-right: 1px solid var(--card-border);
+            z-index: 2001; box-shadow: 5px 0 30px rgba(0,0,0,0.5);
+            display: flex; flex-direction: column; padding: 24px;
+            transition: left 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow-y: auto; gap: 15px;
+        }
+        .sidebar.open { left: 0; }
+        .sidebar-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--card-border); padding-bottom: 15px; }
+        .sidebar-header h2 { font-size: 18px; color: var(--primary-blue); }
+
+        .theme-toggle-box {
+            display: flex; justify-content: space-between; align-items: center;
+            background: var(--input-bg); padding: 10px 14px; border-radius: 10px;
+            border: 1px solid var(--card-border); font-size: 13px; font-weight: 600; cursor: pointer;
+        }
+
+        .panel-btn {
+            background: var(--input-bg); border: 1px solid var(--card-border); color: var(--text-main);
+            padding: 12px; border-radius: 10px; font-weight: 700; text-align: left; cursor: pointer;
+            display: flex; justify-content: space-between; align-items: center; font-size: 13px;
+        }
+        .panel-btn:hover { border-color: var(--primary-blue); }
+
+        /* Promo Box */
+        .promo-box {
+            background: var(--input-bg); border: 1px solid var(--card-border);
+            padding: 15px; border-radius: 12px; text-align: center; margin-top: auto; font-size: 12px;
+        }
+        .promo-box h4 { color: var(--primary-blue); margin-bottom: 5px; }
+        .social-btns { display: flex; flex-direction: column; gap: 6px; margin-top: 10px; }
+        .social-btn { padding: 8px; border-radius: 6px; text-decoration: none; color: white; font-weight: bold; font-size: 11px; }
+        .btn-phone { background: #10b981; } .btn-tg { background: #0284c7; } .btn-insta { background: #db2777; }
+
+        /* Dashboard & Modals */
+        .admin-dashboard-page {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: var(--bg-color); z-index: 4000; overflow-y: auto; padding: 30px 20px;
+        }
+        .dashboard-container {
+            max-width: 800px; margin: 0 auto; background-color: var(--card-bg);
+            border: 1px solid var(--card-border); border-radius: 20px; padding: 30px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4); display: flex; flex-direction: column; gap: 20px;
+        }
+        .admin-nav-tabs { display: flex; gap: 10px; border-bottom: 1px solid var(--card-border); padding-bottom: 10px; }
+        .admin-nav-btn {
+            flex: 1; padding: 10px; border-radius: 8px; border: 1px solid var(--card-border);
+            background: var(--input-bg); color: var(--text-main); font-weight: bold; cursor: pointer; font-size: 13px;
+        }
+        .admin-nav-btn.active { background: var(--primary-blue); color: white; border-color: var(--primary-blue); }
+
+        .image-preview-container { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+        .img-preview-box { width: 75px; height: 75px; border-radius: 8px; object-fit: cover; border: 1px solid var(--card-border); }
+
+        /* Gallery Style Zoom Lightbox */
+        .lightbox-modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95); z-index: 5000; justify-content: center; align-items: center; padding: 20px; overflow: hidden;
+        }
+        .lightbox-modal img {
+            max-width: 100%; max-height: 90vh; border-radius: 10px; object-fit: contain;
+            cursor: grab; transition: transform 0.1s ease-out; touch-action: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <button class="menu-toggle-btn" onclick="toggleSidebar()"><i class="fa-solid fa-bars"></i></button>
+        <div class="brand-container">
+            <div class="brand-title">
+                <h1 id="brandNameText">ሻሚል ሞተር እና ባጃጅ</h1>
+                <p>Shamil Motor & Bajaj Sales</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Welcome Banner -->
+    <div class="welcome-section">
+        <h2 id="welTitle">ዘመናዊ ሞተሮች፣ ባጃጆች እና ስኩተሮች</h2>
+        <p id="welDesc">ጥራት ያላቸው አዲስ እና ያገለገሉ ሞተሮች፤ ባጃጆች እና የብስክሌት እቃዎች በጥሩ ዋጋ እና እምነት እኛთან ያገኛሉ! ይጎብኙን።</p>
+    </div>
+
+    <!-- Main Section -->
+    <div class="container">
+        <div class="search-filter-section">
+            <div class="search-bar">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="searchInput" placeholder="ሞተር ወይም ባጃጅ ይፈልጉ..." oninput="renderVehicles()">
+            </div>
+            <div class="category-tabs" id="categoryTabsContainer">
+                <button class="tab-btn active" onclick="setCategory('all', this)">ሁሉም</button>
+            </div>
+        </div>
+
+        <div id="vehiclesGrid" class="vehicles-grid">
+            <div style="text-align:center; padding:50px; color:var(--text-muted); grid-column:1/-1;">መረጃዎች እየተጫኑ ነው...</div>
+        </div>
+    </div>
+
+    <!-- Sticky Footer -->
+    <div class="sticky-footer">
+        <div class="footer-info">
+            <span id="footerLoc">አድራሻ: ወራቤ፣ ዋናው መንገድ</span>
+        </div>
+        <a href="tel:0978631196" id="footerPhoneBtn" class="footer-call-btn">
+            <i class="fa-solid fa-phone"></i> <span id="footerPhoneText">0978631196</span>
+        </a>
+    </div>
+
+    <!-- Left Sidebar Drawer -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h2>⚙️ Menu Panel</h2>
+            <button style="border:none; background:none; font-size:18px; cursor:pointer; color:var(--text-main);" onclick="toggleSidebar()">✕</button>
+        </div>
+
+        <div class="theme-toggle-box" onclick="toggleTheme()">
+            <span>🌗 Theme Mode</span>
+            <span id="theme-switch-btn">🌙 Dark Mode</span>
+        </div>
+
+        <button class="panel-btn" onclick="openAuthModal('dashboard')">🔐 Admin Dashboard <span>▶</span></button>
+        <button class="panel-btn" onclick="openAuthModal('settings')">⚙️ Settings & Password <span>▶</span></button>
+
+        <div class="promo-box">
+            <h4>Developed by FAF ELA</h4>
+            <p>እንደዚህ አይነት ዘመናዊ ዌብሳይት ለማሰራት፦</p>
+            <div class="social-btns">
+                <a href="tel:+251978631196" class="social-btn btn-phone">Contact on Phone</a>
+                <a href="https://t.me/Wizzela" target="_blank" id="sidebarTgBtn" class="social-btn btn-tg">Contact on Telegram</a>
+                <a href="https://instagram.com/wiz_elaa" target="_blank" class="social-btn btn-insta">Contact on Instagram</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Password Verification Modal -->
+    <div id="adminAuthModal" class="admin-dashboard-page" style="display:none; z-index:5000; align-items:center; justify-content:center;">
+        <div class="dashboard-container" style="max-width:400px; text-align:center;">
+            <h3>🔐 Admin Password</h3>
+            <p style="font-size:13px; color:var(--text-muted);">እባክዎ የሚስጥር ኮድ ያስገቡ</p>
+            <div style="position:relative; width:100%;">
+                <input type="password" id="adminPinInput" placeholder="Enter PIN..." style="width:100%; padding:12px 40px 12px 12px; background:var(--input-bg); border:1px solid var(--card-border); border-radius:8px; color:var(--text-main);">
+                <i class="fa-solid fa-eye" id="toggleEyeIcon" onclick="togglePasswordVisibility()" style="position:absolute; right:12px; top:50%; transform:translateY(-50%); cursor:pointer; color:var(--text-muted);"></i>
+            </div>
+            <div style="display:flex; gap:10px; margin-top:10px;">
+                <button onclick="verifyAdminPin()" style="flex:1; background:#16a34a; color:white; border:none; padding:10px; border-radius:8px; font-weight:bold; cursor:pointer;">Verify</button>
+                <button onclick="closeAuthModal()" style="flex:1; background:#dc2626; color:white; border:none; padding:10px; border-radius:8px; font-weight:bold; cursor:pointer;">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal Page -->
+    <div class="admin-dashboard-page" id="settingsPage">
+        <div class="dashboard-container" style="max-width:500px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--card-border); padding-bottom:12px;">
+                <h3>⚙️ Store Settings & Security</h3>
+                <button onclick="closeSettingsPage()" style="background:#dc2626; color:white; border:none; padding:6px 12px; border-radius:6px; font-weight:bold; cursor:pointer;">✕</button>
+            </div>
+
+            <div style="display:flex; flex-direction:column; gap:10px;">
+                <label style="font-size:12px; font-weight:bold;">ስልክ ቁጥር (Phone Number):</label>
+                <input type="text" id="cfgPhone" placeholder="0978631196" style="padding:10px; background:var(--input-bg); border:1px solid var(--card-border); border-radius:8px; color:var(--text-main);">
+
+                <label style="font-size:12px; font-weight:bold;">ቴሌግራም ዩዘርኔም (Telegram Username):</label>
+                <input type="text" id="cfgTelegram" placeholder="Wizzela" style="padding:10px; background:var(--input-bg); border:1px solid var(--card-border); border-radius:8px; color:var(--text-main);">
+
+                <label style="font-size:12px; font-weight:bold;">አዲስ የአድሚን ፓስዎርድ (New Admin PIN):</label>
+                <input type="password" id="cfgNewPin" placeholder="የአሁኑ: 1234..." style="padding:10px; background:var(--input-bg); border:1px solid var(--card-border); border-radius:8px; color:var(--text-main);">
+
+                <button onclick="saveStoreSettings()" style="background:#ea580c; color:white; border:none; padding:12px; border-radius:8px; font-weight:bold; cursor:pointer; margin-top:10px;">💾 Save Settings & Logout</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Full Page Admin Dashboard Modal -->
+    <div class="admin-dashboard-page" id="adminDashboardPage">
+        <div class="dashboard-container">
+            <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--card-border); padding-bottom:15px;">
+                <h2 style="color:var(--primary-blue);">🚀 Admin Dashboard</h2>
+                <button onclick="closeAdminDashboard()" style="background:#dc2626; color:white; border:none; padding:8px 14px; border-radius:8px; font-weight:bold; cursor:pointer;">✕ Close & Reset</button>
+            </div>
+
+            <!-- Flow Navigation Buttons -->
+            <div class="admin-nav-tabs">
+                <button class="admin-nav-btn active" id="tabNavAdd" onclick="switchAdminTab('add')">➕ Add Vehicle</button>
+                <button class="admin-nav-btn" id="tabNavEdit" onclick="switchAdminTab('edit')">📝 Edit / Delete Vehicles</button>
+            </div>
+
+            <!-- Tab 1: Add Vehicle -->
+            <div id="adminTabAdd" style="display:flex; flex-direction:column; gap:12px;">
+                <form onsubmit="handleUploadVehicle(event)" style="display:flex; flex-direction:column; gap:10px;">
+                    <input type="text" id="vName" placeholder="Vehicle Name / Model..." required style="padding:10px; background:var(--input-bg); border:1px solid var(--card-border); border-radius:8px; color:var(--text-main);">
+                    <input type="text" id="vPrice" placeholder="Price (ምሳሌ: 450,000)..." required oninput="formatPriceInput(this)" style="padding:10px; background:var(--input-bg); border:1px solid var(--card-border); border-radius:8px; color:var(--text-main);">
+                    <textarea id="vDesc" placeholder="Description..." rows="2" style="padding:10px; background:var(--input-bg); border:1px solid var(--card-border); border-radius:8px; color:var(--text-main);"></textarea>
+                    
+                    <select id="vCategorySelect" style="padding:10px; background:var(--input-bg); border:1px solid var(--card-border); border-radius:8px; color:var(--text-main);"></select>
+
+                    <label style="font-size:12px; font-weight:bold;">Upload Photos (Choose Files / Take Photo):</label>
+                    <input type="file" id="vFile1" accept="image/*" onchange="previewImages()" style="padding:8px; background:var(--input-bg); border:1px solid var(--card-border); border-radius:8px; color:var(--text-main);" required>
+                    <input type="file" id="vFile2" accept="image/*" onchange="previewImages()" style="padding:8px; background:var(--input-bg); border:1px solid var(--card-border); border-radius:8px; color:var(--text-main);">
+                    <input type="file" id="vFile3" accept="image/*" onchange="previewImages()" style="padding:8px; background:var(--input-bg); border:1px solid var(--card-border); border-radius:8px; color:var(--text-main);">
+
+                    <div class="image-preview-container" id="imagePreviewContainer"></div>
+
+                    <div style="display:flex; gap:10px; margin-top:10px;">
+                        <button type="submit" style="flex:1; background:#16a34a; color:white; border:none; padding:12px; border-radius:8px; font-weight:bold; cursor:pointer;">💾 Save Vehicle</button>
+                        <button type="button" onclick="closeAdminDashboard()" style="background:#475569; color:white; border:none; padding:12px; border-radius:8px; font-weight:bold; cursor:pointer;">Cancel</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Tab 2: Edit & Delete Vehicles -->
+            <div id="adminTabEdit" style="display:none; flex-direction:column; gap:12px;">
+                <h4 style="font-size:14px;">Select Vehicle to Edit or Delete:</h4>
+                <div id="adminProductsList" style="display:flex; flex-direction:column; gap:8px; max-height:350px; overflow-y:auto;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gallery Lightbox Modal -->
+    <div class="lightbox-modal" id="lightboxModal" onclick="closeLightbox()">
+        <button style="position:absolute; top:20px; right:25px; color:white; font-size:30px; background:none; border:none; cursor:pointer; z-index:5010;">&times;</button>
+        <img id="lightboxImg" src="" alt="Zoomed" onclick="event.stopPropagation()">
+    </div>
+
+    <script>
+        const DB_URL = "https://shamil-motors-default-rtdb.asia-southeast1.firebasedatabase.app/";
+        let vehiclesData = [];
+        let categoriesData = ['bajaj', 'motor', 'cycle'];
+        let currentCat = 'all';
+        let storeConfig = { phone: "0978631196", telegram: "Wizzela", pin: "1234" };
+        let activeTargetAuth = ''; // 'dashboard' or 'settings'
+
+        // Touch Swipe Variables
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        function toggleSidebar() {
+            const sb = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            const isOpen = sb.classList.contains('open');
+            if (isOpen) {
+                sb.classList.remove('open');
+                overlay.style.display = 'none';
+            } else {
+                sb.classList.add('open');
+                overlay.style.display = 'block';
+                closeAuthModal();
+            }
+        }
+
+        function toggleTheme() {
+            const html = document.documentElement;
+            const btn = document.getElementById('theme-switch-btn');
+            if (html.classList.contains('dark')) {
+                html.classList.replace('dark', 'light');
+                btn.innerText = '☀️ Light Mode';
+            } else {
+                html.classList.replace('light', 'dark');
+                btn.innerText = '🌙 Dark Mode';
+            }
+        }
+
+        // Security Logout Reset
+        function resetAuthSession() {
+            document.getElementById('adminPinInput').value = '';
+            document.getElementById('adminAuthModal').style.display = 'none';
+            activeTargetAuth = '';
+        }
+
+        function openAuthModal(target) {
+            activeTargetAuth = target;
+            document.getElementById('adminAuthModal').style.display = 'flex';
+            document.getElementById('adminPinInput').value = '';
+        }
+
+        function closeAuthModal() {
+            resetAuthSession();
+        }
+
+        function togglePasswordVisibility() {
+            const input = document.getElementById('adminPinInput');
+            const icon = document.getElementById('toggleEyeIcon');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.className = 'fa-solid fa-eye-slash';
+            } else {
+                input.type = 'password';
+                icon.className = 'fa-solid fa-eye';
+            }
+        }
+
+        function verifyAdminPin() {
+            const pin = document.getElementById('adminPinInput').value;
+            if (pin === storeConfig.pin) {
+                let target = activeTargetAuth;
+                resetAuthSession();
+                toggleSidebar();
+                
+                if (target === 'dashboard') {
+                    document.getElementById('adminDashboardPage').style.display = 'block';
+                    renderAdminDashboardData();
+                } else if (target === 'settings') {
+                    document.getElementById('settingsPage').style.display = 'flex';
+                    document.getElementById('cfgPhone').value = storeConfig.phone;
+                    document.getElementById('cfgTelegram').value = storeConfig.telegram;
+                }
+            } else {
+                alert('የተሳሳተ ፒን ኮድ!');
+            }
+        }
+
+        function closeAdminDashboard() {
+            document.getElementById('adminDashboardPage').style.display = 'none';
+            resetAuthSession();
+        }
+
+        function closeSettingsPage() {
+            document.getElementById('settingsPage').style.display = 'none';
+            resetAuthSession();
+        }
+
+        async function saveStoreSettings() {
+            let p = document.getElementById('cfgPhone').value.trim();
+            let tg = document.getElementById('cfgTelegram').value.trim();
+            let newPin = document.getElementById('cfgNewPin').value.trim();
+
+            if (p) storeConfig.phone = p;
+            if (tg) storeConfig.telegram = tg;
+            if (newPin) storeConfig.pin = newPin;
+
+            await fetch(`${DB_URL}/config.json`, {
+                method: 'PUT',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(storeConfig)
+            });
+
+            alert('ሴቲንግ በተሳካ ሁኔታ ተቀይሯል!');
+            applyStoreConfig();
+            closeSettingsPage();
+        }
+
+        function applyStoreConfig() {
+            document.getElementById('footerPhoneText').innerText = storeConfig.phone;
+            document.getElementById('footerPhoneBtn').href = `tel:${storeConfig.phone}`;
+            document.getElementById('sidebarTgBtn').href = `https://t.me/${storeConfig.telegram}`;
+        }
+
+        function switchAdminTab(tab) {
+            document.getElementById('adminTabAdd').style.display = tab === 'add' ? 'flex' : 'none';
+            document.getElementById('adminTabEdit').style.display = tab === 'edit' ? 'flex' : 'none';
+            document.getElementById('tabNavAdd').classList.toggle('active', tab === 'add');
+            document.getElementById('tabNavEdit').classList.toggle('active', tab === 'edit');
+        }
+
+        function formatPriceInput(input) {
+            let val = input.value.replace(/,/g, '').replace(/\D/g, '');
+            input.value = val ? Number(val).toLocaleString() : '';
+        }
+
+        async function fetchData() {
+            try {
+                let cfgRes = await fetch(`${DB_URL}/config.json`);
+                let cfgData = await cfgRes.json();
+                if (cfgData) {
+                    storeConfig = { ...storeConfig, ...cfgData };
+                    applyStoreConfig();
+                }
+
+                let res = await fetch(`${DB_URL}/vehicles.json`);
+                let data = await res.json();
+                vehiclesData = [];
+                if (data) {
+                    Object.keys(data).forEach(k => vehiclesData.push({ id: k, ...data[k] }));
+                }
+
+                let catRes = await fetch(`${DB_URL}/categories.json`);
+                let catData = await catRes.json();
+                if (catData) categoriesData = catData;
+
+                renderCategories();
+                renderVehicles();
+            } catch (e) { console.error(e); }
+        }
+
+        function renderCategories() {
+            const container = document.getElementById('categoryTabsContainer');
+            const select = document.getElementById('vCategorySelect');
+            let html = `<button class="tab-btn ${currentCat === 'all' ? 'active' : ''}" onclick="setCategory('all', this)">ሁሉም</button>`;
+            let selectHtml = '';
+
+            categoriesData.forEach(cat => {
+                html += `<button class="tab-btn ${currentCat === cat ? 'active' : ''}" onclick="setCategory('${cat}', this)">${cat}</button>`;
+                selectHtml += `<option value="${cat}">${cat}</option>`;
+            });
+
+            container.innerHTML = html;
+            if (select) select.innerHTML = selectHtml;
+        }
+
+        function setCategory(cat, btn) {
+            currentCat = cat;
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            if (btn) btn.classList.add('active');
+            renderVehicles();
+        }
+
+        function renderVehicles() {
+            const grid = document.getElementById('vehiclesGrid');
+            const query = document.getElementById('searchInput').value.toLowerCase();
+
+            let filtered = vehiclesData.filter(v => {
+                let catMatch = currentCat === 'all' || v.category === currentCat;
+                let searchMatch = v.name.toLowerCase().includes(query) || (v.desc && v.desc.toLowerCase().includes(query));
+                return catMatch && searchMatch;
+            });
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `<div style="text-align:center; padding:50px; color:var(--text-muted); grid-column:1/-1;">ምንም እቃ አልተገኘም።</div>`;
+                return;
+            }
+
+            let html = '';
+            filtered.forEach(v => {
+                let imgs = [];
+                if (v.img1) imgs.push(v.img1);
+                if (v.img2) imgs.push(v.img2);
+                if (v.img3) imgs.push(v.img3);
+                if (imgs.length === 0) imgs.push('https://via.placeholder.com/300x200?text=No+Image');
+
+                let indicators = imgs.map((_, i) => `<span class="indicator ${i === 0 ? 'active' : ''}" data-ind="${v.id}-${i}"></span>`).join('');
+                let formattedPrice = v.price.includes('ብር') ? v.price : `${v.price} ብር`;
+
+                html += `
+                    <div class="vehicle-card">
+                        <div class="card-slider" id="slider-${v.id}" 
+                             ontouchstart="handleTouchStart(event)" 
+                             ontouchend="handleTouchEnd(event, '${v.id}', ${JSON.stringify(imgs)})">
+                            <img src="${imgs[0]}" alt="${v.name}" data-active="0" onclick="openLightbox('${imgs[0]}')">
+                            <div class="slide-indicators">${indicators}</div>
+                        </div>
+                        <div class="card-body">
+                            <div class="vehicle-title">${v.name}</div>
+                            <div class="vehicle-price">${formattedPrice}</div>
+                            <div class="vehicle-desc">${v.desc || ''}</div>
+                            <div class="card-actions">
+                                <a href="tel:${storeConfig.phone}" class="btn-call"><i class="fa-solid fa-phone"></i> ደውል</a>
+                                <a href="https://t.me/${storeConfig.telegram}" target="_blank" class="btn-telegram"><i class="fa-brands fa-telegram"></i> ቴሌግራም</a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            grid.innerHTML = html;
+        }
+
+        // Touch Swipe Event Handler
+        function handleTouchStart(e) {
+            touchStartX = e.changedTouches[0].screenX;
+        }
+
+        function handleTouchEnd(e, vid, imgs) {
+            touchEndX = e.changedTouches[0].screenX;
+            if (touchStartX - touchEndX > 40) changeSlide(vid, 1, imgs); // Swipe Left -> Next
+            if (touchEndX - touchStartX > 40) changeSlide(vid, -1, imgs); // Swipe Right -> Prev
+        }
+
+        function changeSlide(vid, dir, imgs) {
+            let slider = document.getElementById(`slider-${vid}`);
+            let img = slider.querySelector('img');
+            let idx = parseInt(img.getAttribute('data-active')) + dir;
+            if (idx >= imgs.length) idx = 0;
+            if (idx < 0) idx = imgs.length - 1;
+            
+            img.src = imgs[idx];
+            img.setAttribute('data-active', idx);
+            img.setAttribute('onclick', `openLightbox('${imgs[idx]}')`);
+            
+            let inds = slider.querySelectorAll('.indicator');
+            inds.forEach((ind, i) => {
+                if (i === idx) ind.classList.add('active');
+                else ind.classList.remove('active');
+            });
+        }
+
+        // Advanced Gallery Lightbox with Zoom & Pan
+        function openLightbox(src) {
+            let img = document.getElementById('lightboxImg');
+            img.src = src;
+            document.getElementById('lightboxModal').style.display = 'flex';
+            initZoomAndPan(img);
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightboxModal').style.display = 'none';
+        }
+
+        function initZoomAndPan(img) {
+            let scale = 1, lastScale = 1;
+            let pointX = 0, pointY = 0, startX = 0, startY = 0, isDragging = false;
+
+            img.style.transform = `translate(0px, 0px) scale(1)`;
+
+            img.onmousedown = (e) => {
+                e.preventDefault(); startX = e.clientX - pointX; startY = e.clientY - pointY; isDragging = true;
+            };
+            window.onmousemove = (e) => {
+                if (!isDragging) return;
+                pointX = e.clientX - startX; pointY = e.clientY - startY;
+                img.style.transform = `translate(${pointX}px, ${pointY}px) scale(${scale})`;
+            };
+            window.onmouseup = () => { isDragging = false; };
+
+            img.ondblclick = () => {
+                scale = scale === 1 ? 2.5 : 1;
+                pointX = 0; pointY = 0;
+                img.style.transform = `translate(0px, 0px) scale(${scale})`;
+            };
+        }
+
+        function fileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+            });
+        }
+
+        async function previewImages() {
+            let container = document.getElementById('imagePreviewContainer');
+            container.innerHTML = '';
+            for (let i = 1; i <= 3; i++) {
+                let f = document.getElementById(`vFile${i}`).files[0];
+                if (f) {
+                    let url = await fileToBase64(f);
+                    container.innerHTML += `<img src="${url}" class="img-preview-box">`;
+                }
+            }
+        }
+
+        async function handleUploadVehicle(e) {
+            e.preventDefault();
+            let f1 = document.getElementById('vFile1').files[0];
+            let f2 = document.getElementById('vFile2').files[0];
+            let f3 = document.getElementById('vFile3').files[0];
+
+            let img1 = f1 ? await fileToBase64(f1) : '';
+            let img2 = f2 ? await fileToBase64(f2) : '';
+            let img3 = f3 ? await fileToBase64(f3) : '';
+
+            let rawPrice = document.getElementById('vPrice').value;
+            let finalPrice = rawPrice.includes('ብር') ? rawPrice : `${rawPrice} ብር`;
+
+            let newV = {
+                name: document.getElementById('vName').value,
+                price: finalPrice,
+                desc: document.getElementById('vDesc').value,
+                category: document.getElementById('vCategorySelect').value,
+                img1, img2, img3
+            };
+
+            let res = await fetch(`${DB_URL}/vehicles.json`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(newV)
+            });
+
+            if (res.ok) {
+                alert('እቃው በተሳካ ሁኔታ ተመዝግቧል!');
+                e.target.reset();
+                document.getElementById('imagePreviewContainer').innerHTML = '';
+                closeAdminDashboard();
+                fetchData();
+            }
+        }
+
+        function renderAdminDashboardData() {
+            const list = document.getElementById('adminProductsList');
+            let html = '';
+            if (vehiclesData.length === 0) {
+                list.innerHTML = `<p style="font-size:13px; color:var(--text-muted);">ምንም የተመዘገበ እቃ የለም።</p>`;
+                return;
+            }
+            vehiclesData.forEach(v => {
+                html += `<div style="display:flex; justify-content:space-between; align-items:center; background:var(--input-bg); padding:10px 14px; border-radius:8px; border:1px solid var(--card-border); font-size:13px;">
+                    <span><b>${v.name}</b> (${v.price})</span>
+                    <button onclick="deleteVehicle('${v.id}')" style="background:#dc2626; color:white; border:none; padding:6px 12px; border-radius:6px; cursor:pointer; font-weight:bold;">ሰርዝ</button>
+                </div>`;
+            });
+            list.innerHTML = html;
+        }
+
+        async function deleteVehicle(id) {
+            if (!confirm('እርግጠኛ ኖት ይህንን እቃ ማጥፋት ይፈልጋሉ?')) return;
+            await fetch(`${DB_URL}/vehicles/${id}.json`, {method: 'DELETE'});
+            fetchData();
+            renderAdminDashboardData();
+        }
+
+        window.onload = fetchData;
+    </script>
+</body>
+</html>
