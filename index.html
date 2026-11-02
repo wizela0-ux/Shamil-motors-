@@ -74,7 +74,7 @@
             font-size: 22px; font-weight: 800; color: var(--primary-blue);
             text-shadow: 0 0 12px var(--accent-glow);
             letter-spacing: 0.5px;
-    text-shadow: 0 0 10px var(--primary-blue), 0 0 20px var(--accent-glow);
+          text-shadow: 0 0 10px var(--primary-blue), 0 0 20px var(--accent-glow);
         }
 
         .brand-title p {
@@ -122,7 +122,7 @@
             display: flex; flex-direction: column; gap: 10px;
         }
         
-        /* Top Photo Box (Facebook Style) */
+        /* Top Photo Box (Optimized Preview Size & Proportion) */
         .card-image-box {
             background-color: var(--card-bg);
             border: 1px solid var(--card-border);
@@ -133,16 +133,16 @@
 
         .post-images-grid { 
             display: grid; 
-            gap: 3px; 
+            gap: 2px; 
             width: 100%; 
             background: var(--input-bg);
         }
-        .post-images-grid.grid-1 { grid-template-columns: 1fr; height: 240px; }
-        .post-images-grid.grid-2 { grid-template-columns: 1fr 1fr; height: 240px; }
+        .post-images-grid.grid-1 { grid-template-columns: 1fr; height: 260px; }
+        .post-images-grid.grid-2 { grid-template-columns: 1fr 1fr; height: 260px; }
         .post-images-grid.grid-3 { 
             grid-template-columns: 1.5fr 1fr; 
             grid-template-rows: 1fr 1fr; 
-            height: 240px; 
+            height: 260px; 
         }
         .post-images-grid.grid-3 img:nth-child(1) { grid-row: span 2; }
 
@@ -186,7 +186,9 @@
             padding: 12px 20px; display: flex; justify-content: space-between; align-items: center;
             z-index: 999; font-size: 13px; backdrop-filter: blur(10px);
         }
-        .footer-info span { color: var(--text-muted); font-weight: 500; }
+        .footer-info span { color: var(--text-muted); font-weight: 500;
+                          text-shadow: 0 0 10px var(--primary-blue), 0 0 20px var(--accent-glow);
+                          color:lightblue}
         .footer-call-btn {
             background-color: var(--primary-blue); color: white; padding: 8px 16px;
             border-radius: 20px; text-decoration: none; font-weight: 700;
@@ -456,7 +458,7 @@
                 </form>
             </div>
 
-            <!-- Tab 2: Manage Products -->
+            <!-- Tab 2: Manage Products (Now with Photo Edit Support) -->
             <div id="adminTabEdit" style="display:none; flex-direction:column; gap:10px;">
                 <div id="editVehicleListView" style="display:flex; flex-direction:column; gap:8px;">
                     <div id="adminProductsCompactList" style="display:flex; flex-direction:column; gap:8px; max-height:350px; overflow-y:auto;"></div>
@@ -464,16 +466,30 @@
 
                 <div id="editVehicleDetailView" style="display:none; flex-direction:column; gap:10px; background:var(--input-bg); padding:14px; border-radius:10px; border:1px solid var(--card-border);">
                     <div style="display:flex; justify-content:space-between; align-items:center;">
-                        <h4 style="color:var(--primary-blue);">✏️ ማስተካከያ</h4>
+                        <h4 style="color:var(--primary-blue);">✏️ ማስተካከያ (ፎቶዎችን ጨምሮ)</h4>
                         <button onclick="cancelVehicleEdit()" style="background:none; border:none; color:white; font-size:16px; cursor:pointer;">✕</button>
                     </div>
 
                     <form onsubmit="handleUpdateVehicle(event)" style="display:flex; flex-direction:column; gap:8px;">
                         <input type="hidden" id="editVId">
+                        <label style="font-size:11px; font-weight:bold;">ስም / ሞዴል:</label>
                         <input type="text" id="editVName" required style="padding:9px; background:var(--bg-color); border:1px solid var(--card-border); border-radius:8px; color:var(--text-main);">
+                        
+                        <label style="font-size:11px; font-weight:bold;">ዋጋ:</label>
                         <input type="text" id="editVPrice" required oninput="formatPriceInput(this)" style="padding:9px; background:var(--bg-color); border:1px solid var(--card-border); border-radius:8px; color:var(--text-main);">
+                        
+                        <label style="font-size:11px; font-weight:bold;">መግለጫ:</label>
                         <textarea id="editVDesc" rows="2" style="padding:9px; background:var(--bg-color); border:1px solid var(--card-border); border-radius:8px; color:var(--text-main);"></textarea>
+                        
+                        <label style="font-size:11px; font-weight:bold;">ምድብ:</label>
                         <select id="editVCategorySelect" style="padding:9px; background:var(--bg-color); border:1px solid var(--card-border); border-radius:8px; color:var(--text-main);"></select>
+
+                        <label style="font-size:11px; font-weight:bold; margin-top:4px;">ፎቶዎችን መቀየር ከፈለጉ ይምረጡ (አማራጭ):</label>
+                        <input type="file" id="editVFile1" accept="image/*" onchange="previewImages('editImagePreviewContainer', 'editVFile')" style="padding:6px; background:var(--bg-color); border:1px solid var(--card-border); border-radius:8px; color:var(--text-main);">
+                        <input type="file" id="editVFile2" accept="image/*" onchange="previewImages('editImagePreviewContainer', 'editVFile')" style="padding:6px; background:var(--bg-color); border:1px solid var(--card-border); border-radius:8px; color:var(--text-main);">
+                        <input type="file" id="editVFile3" accept="image/*" onchange="previewImages('editImagePreviewContainer', 'editVFile')" style="padding:6px; background:var(--bg-color); border:1px solid var(--card-border); border-radius:8px; color:var(--text-main);">
+
+                        <div class="image-preview-container" id="editImagePreviewContainer"></div>
 
                         <div style="display:flex; gap:8px; margin-top:8px;">
                             <button type="submit" style="flex:1; background:#16a34a; color:white; border:none; padding:10px; border-radius:8px; font-weight:bold; cursor:pointer;">💾 መዝግብ</button>
@@ -645,6 +661,7 @@
                 vehiclesData = [];
                 if (data) {
                     Object.keys(data).forEach(k => vehiclesData.push({ id: k, ...data[k] }));
+                    vehiclesData.reverse(); // አዲሱ ፖስት ከላይ (Top) እንዲቀመጥ ያደርጋል
                 }
 
                 let catRes = await fetch(`${DB_URL}/categories.json`);
@@ -714,7 +731,6 @@
                 let formattedPrice = v.price.includes('ብር') ? v.price : `${v.price} ብር`;
                 let tgOrderLink = `https://t.me/${storeConfig.telegram}?text=${encodeURIComponent('ሰላም፣ ስለዚ እቃ መረጃ እፈልግ ነበር፦ ' + v.name)}`;
 
-                /* Separated Cards Layout (Photo Card Top, Detail Card Bottom) */
                 html += `
                     <div class="vehicle-card">
                         <div class="card-image-box">
@@ -746,8 +762,6 @@
             imgEl.src = currentLightboxImages[currentLightboxIndex];
             
             document.getElementById('customLightbox').style.display = 'flex';
-            
-            // Push history state so Back button closes lightbox instead of leaving page
             window.history.pushState({ lightbox: true }, '', '#lightbox');
         }
 
@@ -764,7 +778,6 @@
             }
         }
 
-        // Handle Browser Back Button for Lightbox
         window.addEventListener('popstate', function(event) {
             const lb = document.getElementById('customLightbox');
             if (lb.style.display === 'flex') {
@@ -784,14 +797,12 @@
             imgEl.src = currentLightboxImages[currentLightboxIndex];
         }
 
-        // Toggle Zoom on Image Click inside Lightbox
         function toggleZoom(e) {
             e.stopPropagation();
             const img = document.getElementById('lightboxImg');
             img.classList.toggle('zoomed');
         }
 
-        // Touch Swipe support inside Lightbox for mobile devices
         let touchStartX = 0;
         let touchEndX = 0;
 
@@ -806,10 +817,10 @@
 
         function handleSwipe() {
             if (touchEndX < touchStartX - 50) {
-                changeLightboxImage(1); // Swipe Left -> Next Image
+                changeLightboxImage(1);
             }
             if (touchEndX > touchStartX + 50) {
-                changeLightboxImage(-1); // Swipe Right -> Prev Image
+                changeLightboxImage(-1);
             }
         }
 
@@ -920,6 +931,13 @@
             document.getElementById('editVDesc').value = v.desc || '';
             document.getElementById('editVCategorySelect').value = v.category;
 
+            // Show existing images in preview container during edit
+            let prevContainer = document.getElementById('editImagePreviewContainer');
+            prevContainer.innerHTML = '';
+            if (v.img1) prevContainer.innerHTML += `<img src="${v.img1}" class="img-preview-box">`;
+            if (v.img2) prevContainer.innerHTML += `<img src="${v.img2}" class="img-preview-box">`;
+            if (v.img3) prevContainer.innerHTML += `<img src="${v.img3}" class="img-preview-box">`;
+
             document.getElementById('editVehicleListView').style.display = 'none';
             document.getElementById('editVehicleDetailView').style.display = 'flex';
         }
@@ -934,15 +952,23 @@
             let id = document.getElementById('editVId').value;
             let v = vehiclesData.find(item => item.id === id);
 
+            let f1 = document.getElementById('editVFile1').files[0];
+            let f2 = document.getElementById('editVFile2').files[0];
+            let f3 = document.getElementById('editVFile3').files[0];
+
+            let img1 = f1 ? await processOriginalImage(f1) : v.img1;
+            let img2 = f2 ? await processOriginalImage(f2) : v.img2;
+            let img3 = f3 ? await processOriginalImage(f3) : v.img3;
+
             let rawPrice = document.getElementById('editVPrice').value;
             let finalPrice = rawPrice.includes('ብር') ? rawPrice : `${rawPrice} ብር`;
 
             let updatedV = {
-                ...v,
                 name: document.getElementById('editVName').value,
                 price: finalPrice,
                 desc: document.getElementById('editVDesc').value,
                 category: document.getElementById('editVCategorySelect').value,
+                img1, img2, img3
             };
 
             let res = await fetch(`${DB_URL}/vehicles/${id}.json`, {
