@@ -74,7 +74,7 @@
             font-size: 22px; font-weight: 800; color: var(--primary-blue);
             text-shadow: 0 0 12px var(--accent-glow);
             letter-spacing: 0.5px;
-          text-shadow: 0 0 10px var(--primary-blue), 0 0 20px var(--accent-glow);
+            text-shadow: 0 0 10px var(--primary-blue), 0 0 20px var(--accent-glow);
         }
 
         .brand-title p {
@@ -178,6 +178,19 @@
             animation: pulse 1.5s infinite ease-in-out; border: 1px solid var(--card-border);
         }
         @keyframes pulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 0.8; } }
+
+        /* Loading Button States */
+        button:disabled {
+            opacity: 0.7;
+            cursor: not-allowed !important;
+        }
+        .fa-spinner {
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
 
         /* Sticky Footer */
         .sticky-footer {
@@ -864,39 +877,52 @@
             }
         }
 
+        /* UPLOAD VEHICLE WITH LOADING SPINNER */
         async function handleUploadVehicle(e) {
             e.preventDefault();
-            let f1 = document.getElementById('vFile1').files[0];
-            let f2 = document.getElementById('vFile2').files[0];
-            let f3 = document.getElementById('vFile3').files[0];
+            let submitBtn = e.target.querySelector('button[type="submit"]');
+            let originalBtnText = submitBtn.innerHTML;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `<i class="fa-solid fa-spinner"></i> በመመዝገብ ላይ...`;
 
-            let img1 = f1 ? await processOriginalImage(f1) : '';
-            let img2 = f2 ? await processOriginalImage(f2) : '';
-            let img3 = f3 ? await processOriginalImage(f3) : '';
+            try {
+                let f1 = document.getElementById('vFile1').files[0];
+                let f2 = document.getElementById('vFile2').files[0];
+                let f3 = document.getElementById('vFile3').files[0];
 
-            let rawPrice = document.getElementById('vPrice').value;
-            let finalPrice = rawPrice.includes('ብር') ? rawPrice : `${rawPrice} ብር`;
+                let img1 = f1 ? await processOriginalImage(f1) : '';
+                let img2 = f2 ? await processOriginalImage(f2) : '';
+                let img3 = f3 ? await processOriginalImage(f3) : '';
 
-            let newV = {
-                name: document.getElementById('vName').value,
-                price: finalPrice,
-                desc: document.getElementById('vDesc').value,
-                category: document.getElementById('vCategorySelect').value,
-                img1, img2, img3
-            };
+                let rawPrice = document.getElementById('vPrice').value;
+                let finalPrice = rawPrice.includes('ብር') ? rawPrice : `${rawPrice} ብር`;
 
-            let res = await fetch(`${DB_URL}/vehicles.json`, {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(newV)
-            });
+                let newV = {
+                    name: document.getElementById('vName').value,
+                    price: finalPrice,
+                    desc: document.getElementById('vDesc').value,
+                    category: document.getElementById('vCategorySelect').value,
+                    img1, img2, img3
+                };
 
-            if (res.ok) {
-                showToast('እቃው ተመዝግቧል!');
-                document.getElementById('addVehicleForm').reset();
-                document.getElementById('imagePreviewContainer').innerHTML = '';
-                closeAdminDashboard();
-                fetchData();
+                let res = await fetch(`${DB_URL}/vehicles.json`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(newV)
+                });
+
+                if (res.ok) {
+                    showToast('እቃው ተመዝግቧል!');
+                    document.getElementById('addVehicleForm').reset();
+                    document.getElementById('imagePreviewContainer').innerHTML = '';
+                    closeAdminDashboard();
+                    fetchData();
+                }
+            } catch (err) {
+                showToast('ስህተት ተፈጥሯል!', '❌');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalBtnText;
             }
         }
 
@@ -947,40 +973,53 @@
             document.getElementById('editVehicleListView').style.display = 'flex';
         }
 
+        /* UPDATE VEHICLE WITH LOADING SPINNER */
         async function handleUpdateVehicle(e) {
             e.preventDefault();
-            let id = document.getElementById('editVId').value;
-            let v = vehiclesData.find(item => item.id === id);
+            let submitBtn = e.target.querySelector('button[type="submit"]');
+            let originalBtnText = submitBtn.innerHTML;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `<i class="fa-solid fa-spinner"></i> በማስተካከል ላይ...`;
 
-            let f1 = document.getElementById('editVFile1').files[0];
-            let f2 = document.getElementById('editVFile2').files[0];
-            let f3 = document.getElementById('editVFile3').files[0];
+            try {
+                let id = document.getElementById('editVId').value;
+                let v = vehiclesData.find(item => item.id === id);
 
-            let img1 = f1 ? await processOriginalImage(f1) : v.img1;
-            let img2 = f2 ? await processOriginalImage(f2) : v.img2;
-            let img3 = f3 ? await processOriginalImage(f3) : v.img3;
+                let f1 = document.getElementById('editVFile1').files[0];
+                let f2 = document.getElementById('editVFile2').files[0];
+                let f3 = document.getElementById('editVFile3').files[0];
 
-            let rawPrice = document.getElementById('editVPrice').value;
-            let finalPrice = rawPrice.includes('ብር') ? rawPrice : `${rawPrice} ብር`;
+                let img1 = f1 ? await processOriginalImage(f1) : v.img1;
+                let img2 = f2 ? await processOriginalImage(f2) : v.img2;
+                let img3 = f3 ? await processOriginalImage(f3) : v.img3;
 
-            let updatedV = {
-                name: document.getElementById('editVName').value,
-                price: finalPrice,
-                desc: document.getElementById('editVDesc').value,
-                category: document.getElementById('editVCategorySelect').value,
-                img1, img2, img3
-            };
+                let rawPrice = document.getElementById('editVPrice').value;
+                let finalPrice = rawPrice.includes('ብር') ? rawPrice : `${rawPrice} ብር`;
 
-            let res = await fetch(`${DB_URL}/vehicles/${id}.json`, {
-                method: 'PUT',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(updatedV)
-            });
+                let updatedV = {
+                    name: document.getElementById('editVName').value,
+                    price: finalPrice,
+                    desc: document.getElementById('editVDesc').value,
+                    category: document.getElementById('editVCategorySelect').value,
+                    img1, img2, img3
+                };
 
-            if (res.ok) {
-                showToast('እቃው ተስተካክሏል!');
-                cancelVehicleEdit();
-                fetchData();
+                let res = await fetch(`${DB_URL}/vehicles/${id}.json`, {
+                    method: 'PUT',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(updatedV)
+                });
+
+                if (res.ok) {
+                    showToast('እቃው ተስተካክሏል!');
+                    cancelVehicleEdit();
+                    fetchData();
+                }
+            } catch (err) {
+                showToast('ስህተት ተፈጥሯል!', '❌');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalBtnText;
             }
         }
 
